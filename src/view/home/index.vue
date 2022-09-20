@@ -119,7 +119,7 @@ const getHomeData = async () => {
   });
 
   //雷达歌单
-  data.raderList = res.data.blocks[8].creatives.map((e: any) => {
+  data.raderList = res.data.blocks[4].creatives.map((e: any) => {
     return {
       imageUrl: e.uiElement.image.imageUrl,
       title: e.uiElement.mainTitle.title,
