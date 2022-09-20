@@ -1,16 +1,23 @@
 <template>
-  <div class="headBar"><HeadBar></HeadBar></div>
-  <router-view></router-view>
+
+    <div class="headBar"><HeadBar></HeadBar></div>
+    <router-view></router-view>
+  
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import HeadBar from "../components/HeadBar/index.vue"
-
+import HeadBar from "../components/HeadBar/index.vue";
 </script>
 
 <style lang="scss" scoped>
-.headBar{
+ 
+.headBar {
+  background-color: #16191E;;
   height: 6rem;
+  top: 0;
+  position: sticky;
+  z-index: 999;
+
 }
 </style>

@@ -23,3 +23,20 @@ export function artist(data:object){
     data
   })
 }
+//获取排行榜全部分类 
+export function topList(data:object){
+  return service({
+    url:'/toplist/detail',
+    method:'post',
+    data
+  })
+}
+
+//获取歌手详情
+export function artistDetail(data:object){
+  return service({
+    url:'/artist/detail',
+    method:'post',
+    data
+  })
+}

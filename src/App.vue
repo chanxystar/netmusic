@@ -16,11 +16,17 @@ import TabBar from './components/TabBar/index.vue'
 .container{
   display: flex;
   height: 100vh;
+  
    .tabBar{
     flex-basis: 16%;
+    
   }
   .page{
     flex: 1;
+    overflow-y: scroll;
+  }
+  .page::-webkit-scrollbar{
+    display: none;
   }
 }
 </style>

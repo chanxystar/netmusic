@@ -58,7 +58,7 @@ let searchValue = ref("");
       border-radius: 1.5rem;
       background-color: #cdf564;
       color: #000000;
-      font-size: 0.75rem;
+      font-size: 1.5rem;
       cursor: pointer;
     }
   }
