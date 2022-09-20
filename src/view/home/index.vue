@@ -4,7 +4,12 @@
       <div class="left">
         <!-- 轮播图 -->
         <div class="banners">
-          <van-swipe class="banners" :autoplay="5000" indicator-color="white">
+          <van-swipe
+            class="banners"
+            lazy-render
+            :autoplay="5000"
+            indicator-color="white"
+          >
             <van-swipe-item
               style="display: inline-block; white-space: nowrap"
               v-for="(item, index) in data.banners"
@@ -16,29 +21,48 @@
         </div>
         <!-- 热门歌手 -->
         <div class="singers">
-          <template v-for="(item, index) in 6" :key="index">
+          <template v-for="(item, index) in data.topArtistList" :key="index">
             <div class="singer">
-              <div class="img"></div>
-              <div class="name">{{ index }}</div>
+              <img :src="item.img1v1Url" />
+              <div class="name">{{ item.name }}</div>
             </div>
           </template>
         </div>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <div class="weelyChart">
+          <img
+          
+          src="../../assets/weelyChart.png"
+          alt="weelyChart"
+        />
+        <span class="text">WeelyChart</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive } from "vue";
-import { homepage } from "../../service/index";
+import { homepage, topArtist } from "../../service/index";
 interface bannerItem {
   bannerId: string;
   pic: string;
 }
+interface artistItem {
+  id: number;
+  img1v1Id: number;
+  img1v1Url: string;
+  isSubed: null;
+  musicSize: number;
+  name: string;
+  picId: number;
+  picUrl: string;
+}
 const data = reactive({
   banners: [] as Array<bannerItem>,
-  url: "",
+  topArtistList: [] as artistItem[],
 });
 //请求、处理首页接口
 const getHomeData = async () => {
@@ -49,15 +73,22 @@ const getHomeData = async () => {
       pic: e.pic,
     };
   });
-  data.url = res.data.blocks[0].extInfo.banners[0].pic;
+};
+
+//加载5位热门歌手
+const getArtist = async () => {
+  const res: any = await topArtist({
+    limit: 5,
+  });
+  data.topArtistList = res.artists;
 };
 onMounted(() => {
   getHomeData();
+  getArtist();
 });
 </script>
 
 <style lang="scss" scoped>
-
 .container {
   padding: 1.5rem;
   .topGroup {
@@ -66,13 +97,13 @@ onMounted(() => {
     .left {
       margin-right: 1rem;
       .banners {
-        height: 24rem;
+        height: 28rem;
         width: 70rem;
         margin-bottom: 1rem;
         overflow: hidden;
         position: relative;
         img {
-          height: 24rem;
+          height: 28rem;
           width: 70rem;
           border-radius: 0.5rem;
         }
@@ -81,11 +112,11 @@ onMounted(() => {
         display: flex;
         justify-content: space-between;
         .singer {
-          .img {
+          img {
             height: 10rem;
             width: 10rem;
             border-radius: 1rem;
-            background-color: #cdf564;
+            object-fit: fill;
           }
           .name {
             text-align: center;
@@ -98,9 +129,26 @@ onMounted(() => {
     }
     .right {
       flex: 1;
-      height: 36.5rem;
-      background-color: #cdf564;
+      height: 41rem;
       border-radius: 0.5rem;
+      background-color:#1E242C ;
+      .weelyChart{
+        position: relative;
+        img {
+        width: 100%;
+        object-fit: contain;
+      }
+      .text{
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 3.5rem;
+        color: aliceblue;
+      }
+      }
+      
     }
   }
 }

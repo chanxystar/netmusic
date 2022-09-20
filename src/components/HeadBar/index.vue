@@ -4,7 +4,7 @@
       <div class="searchInput">
         <input type="text" class="input" placeholder="search..." v-model="searchValue" />
       </div>
-      <div class="btn"></div>
+      <div class="btn iconfont icon-sousuo"></div>
     </div>
     <div class="others">
       <div class="vip">RealTone会员</div>
