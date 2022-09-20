@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="tabBar">
+    <div v-if="tabShow" class="tabBar">
     <TabBar></TabBar>
     </div>
     <div class="page">
@@ -10,6 +10,15 @@
 </template>
 <script setup lang="ts">
 import TabBar from './components/TabBar/index.vue'
+import {useRouter} from 'vue-router'
+import {ref,watch} from 'vue'
+
+//当登入页面时，隐藏tabbar
+const router = useRouter()
+const tabShow = ref(false)
+watch(()=>router.currentRoute.value.fullPath,(newVal)=>{
+  tabShow.value = newVal!=='/login'
+})
 </script>
 
 <style lang="scss" scoped>
