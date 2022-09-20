@@ -4,7 +4,15 @@
       <div class="left">
         <!-- 轮播图 -->
         <div class="banners">
-          <img :src="data.url" alt="cover" />
+          <van-swipe class="banners" :autoplay="5000" indicator-color="white">
+            <van-swipe-item
+              style="display: inline-block; white-space: nowrap"
+              v-for="(item, index) in data.banners"
+              :key="index"
+            >
+              <img :src="item.pic" alt="" />
+            </van-swipe-item>
+          </van-swipe>
         </div>
         <!-- 热门歌手 -->
         <div class="singers">
@@ -24,15 +32,24 @@
 <script setup lang="ts">
 import { onMounted, reactive } from "vue";
 import { homepage } from "../../service/index";
+interface bannerItem {
+  bannerId: string;
+  pic: string;
+}
 const data = reactive({
-  banners: [],
+  banners: [] as Array<bannerItem>,
   url: "",
 });
 //请求、处理首页接口
 const getHomeData = async () => {
   const res: any = await homepage({});
+  data.banners = res.data.blocks[0].extInfo.banners.map((e: any) => {
+    return {
+      bannerId: e.bannerId,
+      pic: e.pic,
+    };
+  });
   data.url = res.data.blocks[0].extInfo.banners[0].pic;
- 
 };
 onMounted(() => {
   getHomeData();
@@ -40,6 +57,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
 .container {
   padding: 1.5rem;
   .topGroup {
@@ -51,11 +69,12 @@ onMounted(() => {
         height: 24rem;
         width: 70rem;
         margin-bottom: 1rem;
+        overflow: hidden;
+        position: relative;
         img {
           height: 24rem;
           width: 70rem;
           border-radius: 0.5rem;
-          
         }
       }
       .singers {
