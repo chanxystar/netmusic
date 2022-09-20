@@ -11,7 +11,7 @@
           <template v-for="(item, index) in 6" :key="index">
             <div class="singer">
               <div class="img"></div>
-              <div class="name">{{index}}</div>
+              <div class="name">{{ index }}</div>
             </div>
           </template>
         </div>
@@ -23,18 +23,19 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from "vue";
-import { test } from "../../service/index";
+import { homepage } from "../../service/index";
 const data = reactive({
+  banners: [],
   url: "",
 });
 //请求、处理首页接口
-const demo = async () => {
-  const res: any = await test({});
-  data.url = res.data.data.blocks[0].extInfo.banners[0].pic;
-  console.log(data.url);
+const getHomeData = async () => {
+  const res: any = await homepage({});
+  data.url = res.data.blocks[0].extInfo.banners[0].pic;
+ 
 };
 onMounted(() => {
-  demo();
+  getHomeData();
 });
 </script>
 
@@ -43,45 +44,44 @@ onMounted(() => {
   padding: 1.5rem;
   .topGroup {
     display: flex;
-    
+
     .left {
       margin-right: 1rem;
       .banners {
+        height: 24rem;
+        width: 70rem;
+        margin-bottom: 1rem;
         img {
           height: 24rem;
           width: 70rem;
           border-radius: 0.5rem;
-          margin-bottom: 1rem;
+          
         }
       }
-      .singers{
+      .singers {
         display: flex;
         justify-content: space-between;
-        .singer{
-          
-            .img{
-              height: 10rem;
+        .singer {
+          .img {
+            height: 10rem;
             width: 10rem;
             border-radius: 1rem;
-            background-color: #CDF564;
-            }
-            .name{
-              text-align: center;
-              line-height: 2rem;
-              font-size: 1rem;
-              color: aliceblue;
-            }
+            background-color: #cdf564;
+          }
+          .name {
+            text-align: center;
+            line-height: 2rem;
+            font-size: 1rem;
+            color: aliceblue;
+          }
         }
-
       }
     }
-    .right{
-        flex: 1;
-        height:36.5rem;
-        background-color: #CDF564;
-        border-radius: 0.5rem;
-        
-        
+    .right {
+      flex: 1;
+      height: 36.5rem;
+      background-color: #cdf564;
+      border-radius: 0.5rem;
     }
   }
 }
