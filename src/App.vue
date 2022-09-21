@@ -17,7 +17,7 @@ import {ref,watch} from 'vue'
 const router = useRouter()
 const tabShow = ref(false)
 watch(()=>router.currentRoute.value.fullPath,(newVal)=>{
-  tabShow.value = newVal!=='/login'
+  tabShow.value = (newVal!== '/loginMain'&& newVal!== '/logister')
 })
 </script>
 

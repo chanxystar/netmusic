@@ -1,4 +1,14 @@
 import service from '../utils/network'
+
+
+//登入
+export function loginApi(data:object){
+  return service({
+    url:'/login',
+    method:'post',
+    data
+  })
+}
 // 首页-发现 
 export  function homepage(data:object){
   return service({

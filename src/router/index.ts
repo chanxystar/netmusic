@@ -2,7 +2,7 @@ import { createRouter,createWebHistory,RouteRecordRaw} from "vue-router";
 const routes:Array<RouteRecordRaw> =[
   {
     path:'/',
-    redirect:'/index'
+    redirect:'/login'
   },
   {
     path:'/index',
@@ -20,7 +20,18 @@ const routes:Array<RouteRecordRaw> =[
   {
     path:'/login',
     name:'login',
-    component:()=>import('@/view/login/index.vue')
+    redirect:'/loginMain',
+    component:()=>import('@/view/login/index.vue'),
+    children:[
+      {
+        path:'/loginMain',
+        component:()=>import('@/view/login/main/index.vue')
+      },
+      {
+        path:'/logister',
+        component:()=>import('@/view/login/logister/index.vue')
+      }
+    ]
   }
   
 ]
