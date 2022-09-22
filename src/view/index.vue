@@ -8,6 +8,13 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 import HeadBar from "../components/HeadBar/index.vue";
+import {loginStatus,userAccount} from '../service/index'
+const status = async()=>{
+   const res  = await userAccount({})
+}
+onMounted(()=>{
+  status()
+})
 </script>
 
 <style lang="scss" scoped>

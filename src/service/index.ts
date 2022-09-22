@@ -9,6 +9,30 @@ export function loginApi(data:object){
     data
   })
 }
+//登入状态 
+export function loginStatus(data:object){
+  return service({
+    url:'/login/status',
+    method:'post',
+    data
+  })
+}
+//退出登入
+export function logout(data:object){
+  return service({
+    url:'/logout',
+    method:'post',
+    data
+  })
+}
+//获取账号信息
+export function userAccount(data:object){
+  return service({
+    url:'/user/account',
+    method:'post',
+    data
+  })
+}
 // 首页-发现 
 export  function homepage(data:object){
   return service({

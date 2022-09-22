@@ -2,23 +2,47 @@
   <div class="container">
     <div class="searchArea">
       <div class="searchInput">
-        <input type="text" class="input" placeholder="search..." v-model="searchValue" />
+        <input
+          type="text"
+          class="input"
+          placeholder="search..."
+          v-model="searchValue"
+        />
       </div>
       <div class="btn iconfont icon-sousuo"></div>
     </div>
     <div class="others">
       <div class="vip">RealTone会员</div>
-      <div class="icon">
+      <div class="icon" @click="logOut">
         <img src="../../assets/headIcon.png" alt="headIcon" />
       </div>
-      <div class="person">Dan Persie</div>
+      <div @click="goLogin" class="person">{{ nickname }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useStore } from "../../store/user";
+import { useRouter } from "vue-router";
+import { logout } from "../../service/index";
+const store = useStore();
+const router = useRouter();
 let searchValue = ref("");
+let nickname = ref("");
+const goLogin = () => {
+  router.push("/login");
+};
+const logOut = async () => {
+  store.reomoveToken();
+  store.removeInfo();
+  await logout({});
+  nickname.value = "请登入";
+};
+onMounted(() => {
+  nickname.value =
+    store.userInfo === "" ? "请登入" : JSON.parse(store.userInfo).nickname;
+});
 </script>
 
 <style lang="scss" scoped>
