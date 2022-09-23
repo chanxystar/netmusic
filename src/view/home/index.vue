@@ -77,17 +77,19 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { onMounted, reactive } from "vue";
 import { homepage, topArtist, topList } from "../../service/index";
-interface bannerItem {
+import { useStore } from "../../store/user";
+interface BannerItem {
   bannerId: string;
   pic: string;
 }
-interface rankItem {
+interface RankItem {
   first: string;
   second: string;
 }
-interface artistItem {
+interface ArtistItem {
   id: number;
   img1v1Id: number;
   img1v1Url: string;
@@ -97,15 +99,16 @@ interface artistItem {
   picId: number;
   picUrl: string;
 }
-interface raderItem {
+interface RaderItem {
   imageUrl: string;
   title: string;
 }
+const stroe = useStore();
 const data = reactive({
-  banners: [] as bannerItem[],
-  topArtistList: [] as artistItem[],
-  rankList: [] as rankItem[],
-  raderList: [] as raderItem[],
+  banners: [] as BannerItem[],
+  topArtistList: [] as ArtistItem[],
+  rankList: [] as RankItem[],
+  raderList: [] as RaderItem[],
 });
 //请求、处理首页接口
 const getHomeData = async () => {
@@ -117,9 +120,10 @@ const getHomeData = async () => {
       pic: e.pic,
     };
   });
-
+  const store = useStore();
   //雷达歌单
-  data.raderList = res.data.blocks[4].creatives.map((e: any) => {
+  let index = store.isLogin ? 3 : 4;
+  data.raderList = res.data.blocks[index].creatives.map((e: any) => {
     return {
       imageUrl: e.uiElement.image.imageUrl,
       title: e.uiElement.mainTitle.title,

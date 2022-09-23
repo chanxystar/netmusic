@@ -1,15 +1,17 @@
 import {defineStore} from 'pinia'
-interface IUser{
 
-}
 export const useStore = defineStore('userInfo',{
   state:()=>{
     return{
+      isLogin:false,
       token:localStorage.getItem('token')||'',
       userInfo:localStorage.getItem('userInfo')||''
     }
   },
  actions:{
+    changeStatus(bool:boolean){
+      this.isLogin = bool
+    },
     setToken(str:string){
       this.token  = str
       localStorage.setItem('token',str)

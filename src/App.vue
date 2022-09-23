@@ -11,13 +11,20 @@
 <script setup lang="ts">
 import TabBar from './components/TabBar/index.vue'
 import {useRouter} from 'vue-router'
-import {ref,watch} from 'vue'
-
+import {ref,watch,onMounted} from 'vue'
+import {useStore} from './store/user'
+const store = useStore()
 //当登入页面时，隐藏tabbar
 const router = useRouter()
 const tabShow = ref(false)
 watch(()=>router.currentRoute.value.fullPath,(newVal)=>{
   tabShow.value = (newVal!== '/loginMain'&& newVal!== '/logister')
+})
+onMounted(()=>{
+  let flag = localStorage.getItem('userInfo')
+  if(flag) store.isLogin = true
+  
+  
 })
 </script>
 

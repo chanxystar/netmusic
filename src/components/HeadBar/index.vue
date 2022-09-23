@@ -13,19 +13,31 @@
     </div>
     <div class="others">
       <div class="vip">RealTone会员</div>
-      <div class="icon" @click="logOut">
+      <div class="icon" @click="Toast('敬请期待')">
         <img src="../../assets/headIcon.png" alt="headIcon" />
       </div>
-      <div @click="goLogin" class="person">{{ nickname }}</div>
+      <van-popover
+      v-if="store.isLogin"
+        v-model:show="personPopData.show"
+        @select="selectOption"
+        :actions="personPopData.options"
+        placement="bottom-end"
+      >
+        <template #reference>
+          <div class="person">{{ nickname }}</div>
+        </template>
+      </van-popover>
+      <div v-if="!store.isLogin" @click="goLogin" class="person">{{nickname}}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { useStore } from "../../store/user";
 import { useRouter } from "vue-router";
 import { logout } from "../../service/index";
+import { Toast } from "vant";
 const store = useStore();
 const router = useRouter();
 let searchValue = ref("");
@@ -36,9 +48,34 @@ const goLogin = () => {
 const logOut = async () => {
   store.reomoveToken();
   store.removeInfo();
+  localStorage.removeItem("cookie");
+  store.changeStatus(false);
   await logout({});
   nickname.value = "请登入";
 };
+
+interface OptionItem {
+  text: string;
+  disable: boolean;
+}
+const personPopData = reactive({
+  show: false,
+  options: [
+    { text: "个人中心", disable: true },
+    { text: "退出登入", disable: true },
+  ],
+});
+const selectOption = (option: OptionItem, index: number) => {
+  switch (index) {
+    case 0:
+      router.push('/personal')
+      break;
+    case 1:
+      logOut();
+      break;
+  }
+};
+
 onMounted(() => {
   nickname.value =
     store.userInfo === "" ? "请登入" : JSON.parse(store.userInfo).nickname;

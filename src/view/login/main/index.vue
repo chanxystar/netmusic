@@ -71,6 +71,8 @@ const onSubmit = async (data: Iform) => {
     //储存用户信息
     store.setInfo(res.profile)
     store.setToken(res.token)
+    localStorage.setItem("cookie",res.cookie)
+    store.changeStatus(true)
     router.replace({
       path: "/home",
     });

@@ -7,6 +7,9 @@ const service: AxiosInstance = axios.create({
 //请求拦截
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    let cookie= localStorage.getItem('cookie')||''
+    cookie = encodeURIComponent(cookie)
+    config.data =  {...config.data,cookie}
     return config;
   },
   (error: any) => {

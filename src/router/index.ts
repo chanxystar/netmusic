@@ -14,7 +14,13 @@ const routes:Array<RouteRecordRaw> =[
         name:'home',
         component:()=>import('@/view/home/index.vue')
 
-      }
+      },
+      {
+        path:'/personal',
+        name:'personal',
+        component:()=>import('@/view/personal/index.vue')
+
+      },
     ]
   },
   {

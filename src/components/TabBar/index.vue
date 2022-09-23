@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="logo">
+    <div class="logo" @click="router.push('/home')">
       <img src="../../assets/logo.png" alt="logo" />
     </div>
     <div class="navigation">
@@ -19,7 +19,8 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-
+import { useRouter } from "vue-router";
+const router = useRouter()
 //标题
 const tilteArr = reactive<string[]>(['Home','Library','Blog']);
 const navArr = reactive<string[][]>([
