@@ -114,7 +114,7 @@ const data = reactive({
 const getHomeData = async () => {
   const res: any = await homepage({});
   //储存轮播图数据
-  data.banners = res.data.blocks[0].extInfo.banners.map((e: any) => {
+  data.banners = res.data.data.blocks[0].extInfo.banners.map((e: any) => {
     return {
       bannerId: e.bannerId,
       pic: e.pic,
@@ -122,8 +122,8 @@ const getHomeData = async () => {
   });
   const store = useStore();
   //雷达歌单
-  let index = store.isLogin ? 3 : 4;
-  data.raderList = res.data.blocks[index].creatives.map((e: any) => {
+  let index =  res.data.data.blocks[3].creatives?3:4
+  data.raderList = res.data.data.blocks[index].creatives.map((e: any) => {
     return {
       imageUrl: e.uiElement.image.imageUrl,
       title: e.uiElement.mainTitle.title,
@@ -135,12 +135,12 @@ const getArtist = async () => {
   const res: any = await topArtist({
     limit: 5,
   });
-  data.topArtistList = res.artists;
+  data.topArtistList = res.data.artists;
 };
 //加载周榜数据
 const getTopList = async () => {
   const res: any = await topList({});
-  data.rankList = res.list[3].tracks;
+  data.rankList = res.data.list[3].tracks;
 };
 onMounted(() => {
   getHomeData();

@@ -13,7 +13,7 @@ const status = async()=>{
    const res  = await userAccount({})
 }
 onMounted(()=>{
-  status()
+  
 })
 </script>
 

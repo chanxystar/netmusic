@@ -74,3 +74,13 @@ export function artistDetail(data:object){
     data
   })
 }
+//搜索
+//获取歌手详情
+export function cloudsearch(data:object){
+  return service({
+    url:'/cloudsearch',
+    method:'post',
+    data
+  })
+}
+

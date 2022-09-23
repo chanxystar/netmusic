@@ -6,10 +6,11 @@
           type="text"
           class="input"
           placeholder="search..."
-          v-model="searchValue"
+          v-model="keywords"
+          
         />
       </div>
-      <div class="btn iconfont icon-sousuo"></div>
+      <div @click="search" class="btn iconfont icon-sousuo"></div>
     </div>
     <div class="others">
       <div class="vip">RealTone会员</div>
@@ -40,7 +41,6 @@ import { logout } from "../../service/index";
 import { Toast } from "vant";
 const store = useStore();
 const router = useRouter();
-let searchValue = ref("");
 let nickname = ref("");
 const goLogin = () => {
   router.push("/login");
@@ -58,6 +58,7 @@ interface OptionItem {
   text: string;
   disable: boolean;
 }
+//点击昵称弹出层相关
 const personPopData = reactive({
   show: false,
   options: [
@@ -76,7 +77,20 @@ const selectOption = (option: OptionItem, index: number) => {
   }
 };
 
+//搜索跳转
+let keywords = ref('') 
+const search = ()=>{
+  if(keywords.value=='')return Toast('搜索内容为空')
+  router.push({
+    path:'/searchResult',
+    query:{
+      keywords:keywords.value
+    }
+  })
+  
+}
 onMounted(() => {
+  
   nickname.value =
     store.userInfo === "" ? "请登入" : JSON.parse(store.userInfo).nickname;
 });

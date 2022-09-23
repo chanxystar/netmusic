@@ -67,17 +67,17 @@ const onSubmit = async (data: Iform) => {
     email: userName,
     md5_password: Md5.hashStr(password),
   });
-  if (res.code === 200) {
+  if (res.data.code === 200) {
     //储存用户信息
-    store.setInfo(res.profile)
-    store.setToken(res.token)
-    localStorage.setItem("cookie",res.cookie)
+    store.setInfo(res.data.profile)
+    store.setToken(res.data.token)
+    localStorage.setItem("cookie",res.data.cookie)
     store.changeStatus(true)
     router.replace({
       path: "/home",
     });
   } else {
-    Toast(res.message);
+    Toast(res.data.message);
   }
 };
 </script>

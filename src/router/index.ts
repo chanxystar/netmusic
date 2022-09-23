@@ -21,6 +21,11 @@ const routes:Array<RouteRecordRaw> =[
         component:()=>import('@/view/personal/index.vue')
 
       },
+      {
+        path:'/searchResult',
+        name:'searchResult',
+        component:()=>import('@/view/searchResult/index.vue')
+      }
     ]
   },
   {

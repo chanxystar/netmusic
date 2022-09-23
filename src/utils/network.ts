@@ -22,7 +22,7 @@ service.interceptors.response.use(
   (config: AxiosResponse) => {
     const { status, statusText } = config;
     if (status === 200) {
-      return config.data;
+      return config;
     } else {
       return Promise.reject(statusText);
     }
