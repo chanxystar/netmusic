@@ -75,7 +75,6 @@ export function artistDetail(data:object){
   })
 }
 //搜索
-//获取歌手详情
 export function cloudsearch(data:object){
   return service({
     url:'/cloudsearch',
@@ -84,3 +83,11 @@ export function cloudsearch(data:object){
   })
 }
 
+//获取音乐url
+export function musicUrl(data:object){
+  return service({
+    url:'/song/url',
+    method:'post',
+    data
+  })
+}

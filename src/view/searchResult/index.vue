@@ -4,19 +4,18 @@
       <LongStrip v-for="(item, index) in songsList" :data="item"></LongStrip>
 
     </div>
+    
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted,onBeforeMount } from "vue";
+import { reactive, watch,onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import { cloudsearch } from "../../service/index";
 import LongStrip from "../../components/SongCard/LongStrip/index.vue";
 const route = useRoute();
 const searchParams = reactive({
   keywords: route.query.keywords,
-  limit: 30,
-  offset: 0,
 });
 interface songsItem {
   name: string;
@@ -25,9 +24,15 @@ interface songsItem {
 }
 let songsList = reactive<songsItem[]>([]);
 const search = async () => {
+  searchParams.keywords = route.query.keywords
   const res = await cloudsearch(searchParams);
+  console.log(searchParams,res.data);
+  
   songsList.push(...res.data.result.songs);
 };
+watch(()=>route.fullPath,(newVal)=>{
+    search()
+})
 onBeforeMount(() => {
   search();
   
