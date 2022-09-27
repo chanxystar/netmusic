@@ -13,36 +13,73 @@
     </div>
     <div class="player">
       <img class="cover" :src="playerData.coverUrl" />
-      <div class="songName">{{playerData.name}}</div>
+      <div class="songName">{{ playerData.name }}</div>
       <div class="artist-like">
         <div class="artist">{{ playerData.artist }}</div>
         <i class="iconfont like icon-xihuan1"></i>
       </div>
       <div class="progress">
-        <van-progress pivot-text=" " :percentage="50" color="#B9FF00" />
+        <van-slider
+          v-model="playerData.progress"
+          @change="changeProgress"
+          button-size="15px"
+          active-color="#B9FF00"
+        />
       </div>
       <div class="btnArea">
         <i class="iconfont icon-24gf-playlistHeart4"></i>
         <div class="group">
-           <i class="iconfont icon-shangyishou"></i>
-           <i class="iconfont icon-bofang player"></i>
-           <i class="iconfont icon-xiayishou"></i>
+          <i class="iconfont icon-shangyishou"></i>
+          <i
+            :class="
+              playerData.status
+                ? 'iconfont icon-bofangzanting player'
+                : 'iconfont icon-bofang player'
+            "
+            @click="switchPlay"
+          ></i>
+          <i class="iconfont icon-xiayishou"></i>
         </div>
-        <i class="iconfont icon-a-27Gxunhuanbofang"></i>
+        <div class="rightBtn">
+          <van-popover v-model:show="volShow" placement="top">
+             
+              <van-slider
+                v-model="volProgress"
+                active-color="#B9FF00"
+                vertical
+                @change="volChange"
+                :reverse="true"
+                button-size="10px"
+              />
+            
+
+            <template #reference>
+              <i class="iconfont icon-shengyin_shiti"></i>
+            </template>
+          </van-popover>
+          <i class="iconfont icon-a-27Gxunhuanbofang"></i>
+        </div>
       </div>
-      <audio :src="playerData.playUrl" autoplay></audio>
+      <audio
+        ref="player"
+        :src="playerData.playUrl"
+        @ended="ended"
+        autoplay
+        :volume="playerData.volume"
+        @timeupdate="updateTime"
+      ></audio>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive,watch,onMounted } from "vue";
+import { reactive, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
-import {useStore} from '../../store/player'
+import { useStore } from "../../store/player";
 import defaultCover from "@/assets/login/login.png";
 const router = useRouter();
-const store = useStore()
-
+const store = useStore();
+const player = ref();
 //标题
 const tilteArr = reactive<string[]>(["Home", "Library", "Blog"]);
 const navArr = reactive<string[][]>([
@@ -50,27 +87,66 @@ const navArr = reactive<string[][]>([
   ["最喜欢", "老歌", "近期"],
   ["艺人故事", "邮寄"],
 ]);
-
-
-//播放器相关
+//audio控件按钮逻辑
 interface Player {
-  coverUrl: string;
-  playUrl: string;
-  name: string;
-  artist: string;
+  coverUrl: string; //封面
+  playUrl: string; //播放地址
+  name: string; //歌曲名
+  artist: string; //艺术家
+  status: boolean; //播放状态
+  progress: number; //进度
+  volume: number; //音量
 }
-const playerData =reactive<Player>({
-  coverUrl:  store.coverUrl || defaultCover,
+const playerData = reactive<Player>({
+  coverUrl: store.coverUrl || defaultCover,
   playUrl: store.playUrl,
-  name:store.name || '---',
-  artist: store.artist || '----',
+  name: store.name || "---",
+  artist: store.artist || "----",
+  status: true,
+  progress: 0,
+  volume: 0.3,
+});
+//监控到store中的musicId变化后，将store中其他状态更新过来
+watch(
+  () => store.musicId,
+  (newVal, oldVal) => {
+    playerData.coverUrl = store.coverUrl;
+    playerData.playUrl = store.playUrl;
+    playerData.name = store.name;
+    playerData.artist = store.artist;
+  }
+);
+
+//播放与暂停
+const switchPlay = () => {
+  if (playerData.status) {
+    player.value.pause();
+  } else {
+    player.value.play();
+  }
+  playerData.status = !playerData.status;
+};
+
+//播放进度条改变
+const changeProgress = (value: number) => {
+  player.value.currentTime = (value / 100) * player.value.duration;
+};
+//歌曲结束触发
+const ended = () => {
+  playerData.status = false;
+};
+//监听audio播放位置从而改变进度条位置
+const updateTime = () => {
+  const { currentTime, duration } = player.value;
+  playerData.progress = (currentTime / duration) * 100;
+};
+
+//音量控制
+let volShow = ref(false);
+let volProgress = computed(()=>{
+  return 100*playerData.volume
 })
-watch(()=>store.musicId,(newVal,oldVal)=>{
-  playerData.coverUrl = store.coverUrl
-  playerData.playUrl = store.playUrl
-  playerData.name = store.name
-  playerData.artist = store.artist
-})
+const volChange = (value: number) => {};
 </script>
 
 <style lang="scss" scoped>
@@ -146,24 +222,25 @@ watch(()=>store.musicId,(newVal,oldVal)=>{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    i{
+    i {
       color: #b9ff00;
       cursor: pointer;
     }
-    .group{
+    .group {
       display: flex;
       align-items: center;
-      .player{
+      .player {
         height: 2rem;
         width: 2rem;
         border-radius: 1rem;
-        color:#1e242c;
+        color: #1e242c;
         background-color: #b9ff00;
         line-height: 2rem;
         text-align: center;
-        margin:auto 1rem;
+        margin: auto 1rem;
       }
     }
+    
   }
 }
 </style>

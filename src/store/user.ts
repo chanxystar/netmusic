@@ -5,7 +5,7 @@ export const useStore = defineStore('userInfo',{
     return{
       isLogin:false,
       token:localStorage.getItem('token')||'',
-      userInfo:localStorage.getItem('userInfo')||''
+      userInfo:localStorage.getItem('userInfo')||'',
     }
   },
  actions:{
@@ -28,6 +28,6 @@ export const useStore = defineStore('userInfo',{
       this.userInfo =''
       localStorage.removeItem('userInfo')
 
-    }
+    },
  }
 })

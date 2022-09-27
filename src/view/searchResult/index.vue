@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="songsList">
-      <LongStrip v-for="(item, index) in songsList" :data="item"></LongStrip>
+      <LongStrip v-for="(item, index) in songsData.songsList" :data="item"></LongStrip>
 
     </div>
     
@@ -22,13 +22,14 @@ interface songsItem {
   id: string;
   [key: string]: any;
 }
-let songsList = reactive<songsItem[]>([]);
+const songsData = reactive({
+  songsList:[] as songsItem[]
+})
 const search = async () => {
   searchParams.keywords = route.query.keywords
   const res = await cloudsearch(searchParams);
   console.log(searchParams,res.data);
-  
-  songsList.push(...res.data.result.songs);
+  songsData.songsList = res.data.result.songs
 };
 watch(()=>route.fullPath,(newVal)=>{
     search()
